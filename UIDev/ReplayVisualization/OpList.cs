@@ -2,7 +2,9 @@
 using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace UIDev
 {
@@ -129,6 +131,20 @@ namespace UIDev
             };
         }
 
+        private string DumpOp(WorldState.Operation op)
+        {
+            using (var stream = new MemoryStream(1024))
+            {
+                var writer = new ReplayRecorder.TextOutput(stream, null);
+                op.Write(writer);
+                writer.Flush();
+                stream.Position = 0;
+                var bytes = new byte[stream.Length];
+                stream.Read(bytes, 0, bytes.Length);
+                return Encoding.UTF8.GetString(bytes);
+            }
+        }
+
         private string OpName(WorldState.Operation o)
         {
             return o switch
@@ -149,7 +165,7 @@ namespace UIDev
                 ActorState.OpEventObjectStateChange op => $"EObjState: {ActorString(op.InstanceID, op.Timestamp)} = {op.State:X4}",
                 ActorState.OpEventObjectAnimation op => $"EObjAnim: {ActorString(op.InstanceID, op.Timestamp)} = {((uint)op.Param1 << 16) | op.Param2:X8}",
                 ActorState.OpPlayActionTimelineEvent op => $"Play action timeline: {ActorString(op.InstanceID, op.Timestamp)} = {op.ActionTimelineID:X4}",
-                _ => o.ToString() ?? o.GetType().Name
+                _ => DumpOp(o)
             };
         }
 
@@ -245,7 +261,8 @@ namespace UIDev
 
         private string ActorString(ulong instanceID, DateTime timestamp)
         {
-            return ActorString(FindParticipant(instanceID, timestamp), timestamp);
+            var p = FindParticipant(instanceID, timestamp);
+            return p != null || instanceID == 0 ? ActorString(p, timestamp) : $"<unknown> {instanceID:X}";
         }
 
         private string CastEventTargetString(ActorCastEvent ev, DateTime timestamp)

@@ -18,13 +18,15 @@ namespace BossMod
         private DebugInput _debugInput;
         private DebugAutorotation _debugAutorot;
         private DebugClassDefinitions _debugClassDefinitions;
+        private DebugAddon _debugAddon = new();
+        private DebugTiming _debugTiming = new();
 
-        public DebugUI(WorldState ws, Autorotation autorot, InputOverride inputOverride)
+        public DebugUI(WorldState ws, Autorotation autorot)
         {
             _ws = ws;
             _autorot = autorot;
             _debugAction = new(ws);
-            _debugInput = new(inputOverride, autorot);
+            _debugInput = new(autorot);
             _debugAutorot = new(autorot);
             _debugClassDefinitions = new(ws);
         }
@@ -33,6 +35,7 @@ namespace BossMod
         {
             _debugInput.Dispose();
             _debugClassDefinitions.Dispose();
+            _debugAddon.Dispose();
         }
 
         public unsafe void Draw()
@@ -126,6 +129,14 @@ namespace BossMod
             {
                 DrawCountdown();
             }
+            if (ImGui.CollapsingHeader("Addon"))
+            {
+                _debugAddon.Draw();
+            }
+            if (ImGui.CollapsingHeader("Timing"))
+            {
+                _debugTiming.Draw();
+            }
         }
 
         private void DrawStatuses()
@@ -197,7 +208,7 @@ namespace BossMod
             {
                 var closest = Service.ObjectTable.Where(o => o.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.BattleNpc && o.SubKind == 5).MinBy(o => (o.Position - selfPos).LengthSquared());
                 if (closest != null)
-                    Service.TargetManager.SetTarget(closest);
+                    Service.TargetManager.Target = closest;
             }
         }
 
@@ -210,7 +221,7 @@ namespace BossMod
             var dist = selfToObj.Length();
             var angle = Angle.FromDirection(new(selfToObj.XZ())) - refAngle;
             var visHalf = Angle.Asin(obj->HitboxRadius / dist);
-            ImGui.TextUnformatted($"{kind}: {Utils.ObjectString(obj->ObjectID)}, hb={obj->HitboxRadius} ({visHalf}), dist={dist}, angle={angle} ({Math.Max(0, angle.Abs().Rad - visHalf.Rad).Radians()})");
+            ImGui.TextUnformatted($"{kind}: #{obj->ObjectIndex} {Utils.ObjectString(obj->ObjectID)}, hb={obj->HitboxRadius} ({visHalf}), dist={dist}, angle={angle} ({Math.Max(0, angle.Abs().Rad - visHalf.Rad).Radians()})");
         }
 
         private unsafe void DrawPlayerAttributes()
