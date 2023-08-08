@@ -1,7 +1,4 @@
-﻿using Dalamud.Game.ClientState.Objects;
-using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Logging;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -11,6 +8,9 @@ namespace BossMod
     // world state that is updated to correspond to game state
     class WorldStateGame : WorldState, IDisposable
     {
+        private DateTime _startTime;
+        private ulong _startQPC;
+
         private Network _network;
         private PartyAlliance _alliance = new();
         private List<Operation> _globalOps = new();
@@ -20,8 +20,11 @@ namespace BossMod
         private List<(ulong Caster, ActorCastEvent Event)> _castEvents = new();
         private List<(uint Seq, ulong Target, int TargetIndex)> _confirms = new();
 
-        public WorldStateGame(Network network)
+        public WorldStateGame(Network network) : base(Utils.FrameQPF())
         {
+            _startTime = DateTime.Now;
+            _startQPC = Utils.FrameQPC();
+
             _actorsByIndex = new Actor?[Service.ObjectTable.Length];
             _network = network;
             _network.EventActionEffect += OnNetworkActionEffect;
@@ -60,7 +63,15 @@ namespace BossMod
 
         public void Update(TimeSpan prevFramePerf)
         {
-            Execute(new OpFrameStart() { NewTimestamp = DateTime.Now, PrevUpdateTime = prevFramePerf, FrameTimeMS = PreviousFrameDurationMS(), GaugePayload = GaugeData() });
+            var frame = new FrameState() {
+                Timestamp = _startTime.AddSeconds((double)(Utils.FrameQPC() - _startQPC) / QPF),
+                QPC = Utils.FrameQPC(),
+                Index = Utils.FrameIndex(),
+                DurationRaw = Utils.FrameDurationRaw(),
+                Duration = Utils.FrameDuration(),
+                TickSpeedMultiplier = Utils.TickSpeedMultiplier()
+            };
+            Execute(new OpFrameStart() { Frame = frame, PrevUpdateTime = prevFramePerf, GaugePayload = GaugeData() });
             if (CurrentZone != Service.ClientState.TerritoryType)
             {
                 Execute(new OpZoneChange() { Zone = Service.ClientState.TerritoryType });
@@ -248,7 +259,7 @@ namespace BossMod
                 return; // was not casting and is not casting
 
             // note: ignore small finish-at differences, assume these are due to frame time irregularities
-            if (cast != null && act.CastInfo != null && cast.Action == act.CastInfo.Action && cast.TargetID == act.CastInfo.TargetID && Math.Abs((cast.FinishAt - act.CastInfo.FinishAt).TotalSeconds) < 0.05)
+            if (cast != null && act.CastInfo != null && cast.Action == act.CastInfo.Action && cast.TargetID == act.CastInfo.TargetID && Math.Abs((cast.FinishAt - act.CastInfo.FinishAt).TotalSeconds) < 0.2)
             {
                 // continuing casting same spell
                 act.CastInfo.TotalTime = cast.TotalTime;
@@ -356,7 +367,6 @@ namespace BossMod
             _actorOps.Remove(instanceID);
         }
 
-        private unsafe long PreviousFrameDurationMS() => Utils.ReadField<long>(FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance(), 0x16D0);
         private unsafe ulong GaugeData()
         {
             var curGauge = FFXIVClientStructs.FFXIV.Client.Game.JobGaugeManager.Instance()->CurrentGauge;

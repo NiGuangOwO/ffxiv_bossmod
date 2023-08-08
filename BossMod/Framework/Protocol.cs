@@ -3,6 +3,16 @@
 namespace BossMod
 {
     // taken from Machina, FFXIVPacketDissector, XIVAlexander, FFXIVOpcodes and custom research
+    // alternative names:
+    // StatusEffectListBozja: machina = StatusEffectList2
+    // StatusEffectListPlayer: machina = StatusEffectList3
+    // StatusEffectListDouble: machina = BossStatusEffectList
+    // ActionEffectN: machina = AbilityN
+    // SpawnObject: FFXIVOpcodes = ObjectSpawn
+    // SystemLogMessage1: FFXIVOpcodes = SomeDirectorUnk4
+    // WaymarkPreset: FFXIVOpcodes = PlaceFieldMarkerPreset, machina = PresetWaymark
+    // Waymark: FFXIVOpcodes = PlaceFieldMarker
+    // actor control examples: normal = toggle weapon, self = cooldown, target = target change
     class Protocol
     {
         public enum Opcode
