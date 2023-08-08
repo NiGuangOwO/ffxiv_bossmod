@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Numerics;
 using System.Text;
+using static BossMod.Protocol;
 
 namespace BossMod
 {
@@ -101,6 +102,11 @@ namespace BossMod
         {
             HandleMessage((IntPtr)dataPtr + 0x20, Utils.ReadField<ushort>(dataPtr, 0), 0, 0, NetworkMessageDirection.ZoneUp, Utils.ReadField<uint>(dataPtr, 8));
             return _processZonePacketUpHook.Original(self, dataPtr, a3, a4);
+        }
+        private unsafe byte ProcessReplayPacketDetour(IntPtr replayModule, ReplayPacketHeader* header, IntPtr dataPtr)
+        {
+            HandleMessage(dataPtr, header->MessageType, 0, header->TargetId, NetworkMessageDirection.ZoneDown, 0);
+            return _processReplayPacketHook.Original(replayModule, header, dataPtr);
         }
 
         private unsafe void HandleMessage(IntPtr dataPtr, ushort opCode, uint sourceActorId, uint targetActorId, NetworkMessageDirection direction, uint packetLength)
