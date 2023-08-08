@@ -28,23 +28,19 @@ namespace BossMod
             ActorControlTarget = 0x0230,
             ActorGauge = 0x02C0,
             PresetWaymark = 0x03D7,
-            Waymark = 0x011F,
+            Waymark = 0x03A0,
 
-            // 需要单独处理
-            // 48 83 EC ? 45 0F B7 D0 41 81 EA ? ? ? ? 74 ? 41 83 EA ? 74 ? 41 83 EA ?
-            // Second match
-            EffectResult1 = 0x03A7, // Size 0x60
-            EffectResult4 = 0x0329, // Size 0x168
-            EffectResult8 = 0x03AC, // Size 0x2C8
-            EffectResult16 = 0x02E4, // Size 0x588
+            EffectResult1 = 0x03A7,
+            EffectResult4 = 0x0329,
+            EffectResult8 = 0x03AC,
+            EffectResult16 = 0x02E4,
 
-            // 48 83 EC ? 45 0F B7 D0 41 81 FA ? ? ? ? 77 ? 74 ? 41 81 EA ? ? ? ?
-            EffectResultBasic1 = 0x0083, // Size 0x18
-            EffectResultBasic4 = 0x0225, // Size 0x48
-            EffectResultBasic8 = 0x02E2, // Size 0x88
-            EffectResultBasic16 = 0x035C, // Size 0x108
-            EffectResultBasic32 = 0x00AE, // Size 0x208
-            EffectResultBasic64 = 0x0196, // Size 0x408
+            EffectResultBasic1 = 0x0083,
+            EffectResultBasic4 = 0x0225,
+            EffectResultBasic8 = 0x02E2,
+            EffectResultBasic16 = 0x035C,
+            EffectResultBasic32 = 0x00AE,
+            EffectResultBasic64 = 0x0196,
 
             // below are opcodes i've reversed myself...
 
