@@ -39,13 +39,13 @@ namespace BossMod
             //Service.Device = pluginInterface.UiBuilder.Device;
             Service.Condition.ConditionChange += OnConditionChanged;
             Camera.Instance = new();
-            Mouseover.Instance = new();
+            //Mouseover.Instance = new();
 
             Service.Config.Initialize();
             Service.Config.LoadFromFile(dalamud.ConfigFile);
             Service.Config.Modified += (_, _) => Service.Config.SaveToFile(dalamud.ConfigFile);
 
-            ActionManagerEx.Instance = new(); // needs config
+            //ActionManagerEx.Instance = new(); // needs config
 
             _commandManager = commandManager;
             _commandManager.AddHandler("/vbm", new CommandInfo(OnCommand) { HelpMessage = "Show boss mod config UI" });
@@ -54,9 +54,9 @@ namespace BossMod
             _ws = new(_network);
             _debugLogger = new(_ws, dalamud.ConfigDirectory);
             _bossmod = new(_ws);
-            _autorotation = new(_bossmod);
-            _ai = new(ActionManagerEx.Instance.InputOverride, _autorotation);
-            _broadcast = new();
+            //_autorotation = new(_bossmod);
+            //_ai = new(ActionManagerEx.Instance.InputOverride, _autorotation);
+            //_broadcast = new();
 
             dalamud.UiBuilder.DisableAutomaticUiHide = true;
             dalamud.UiBuilder.Draw += DrawUI;
@@ -70,10 +70,10 @@ namespace BossMod
             _debugLogger.Dispose();
             _bossmod.Dispose();
             _network.Dispose();
-            _ai.Dispose();
-            _autorotation.Dispose();
-            Mouseover.Instance?.Dispose();
-            ActionManagerEx.Instance?.Dispose();
+            //_ai.Dispose();
+            //_autorotation.Dispose();
+            //Mouseover.Instance?.Dispose();
+            //ActionManagerEx.Instance?.Dispose();
             _commandManager.RemoveHandler("/vbm");
         }
 

@@ -2,8 +2,8 @@
   "Author": "veyn",
   "Name": "Boss Mod",
   "InternalName": "BossMod",
-  "Punchline": "Don't fail at raid mechanics anymore",
-  "Description": "A bunch of utilities to simplify bosses. Currently supports endwalker content. ***very early alpha, use at your own risk***",
+  "Punchline": "大脑按摩用的",
+  "Description": "本仓库版来自y佬维护版编译，仅保留画图，还不快说谢谢y佬",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/awgil/ffxiv_bossmod",
   "IconUrl": "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/f4efcb5dc279d21ee16185d5a9f2d09a3a2bc58b/Data/icon.png",
@@ -12,5 +12,6 @@
     "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image1.png",
     "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image2.png",
     "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image3.png"
-  ]
+  ],
+  "Changelog": "CN 6.35"
 }

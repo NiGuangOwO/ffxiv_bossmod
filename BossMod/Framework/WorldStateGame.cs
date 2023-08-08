@@ -37,7 +37,7 @@ namespace BossMod
             _network.EventEnvControl += OnNetworkEnvControl;
             _network.EventWaymark += OnNetworkWaymark;
             _network.EventRSVData += OnNetworkRSVData;
-            ActionManagerEx.Instance!.ActionRequested += OnActionRequested;
+            //ActionManagerEx.Instance!.ActionRequested += OnActionRequested;
         }
 
         public void Dispose()
@@ -55,7 +55,7 @@ namespace BossMod
             _network.EventEnvControl -= OnNetworkEnvControl;
             _network.EventWaymark -= OnNetworkWaymark;
             _network.EventRSVData -= OnNetworkRSVData;
-            ActionManagerEx.Instance!.ActionRequested -= OnActionRequested;
+            //ActionManagerEx.Instance!.ActionRequested -= OnActionRequested;
         }
 
         public void Update(TimeSpan prevFramePerf)
