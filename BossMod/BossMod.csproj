@@ -70,8 +70,4 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="DefaultDalamudPackagerRelease" Condition="'$(Configuration)' == 'Release'">
-    <Exec Command="robocopy $(TargetDir)$(ProjectName) ..\..\PluginDistribution\plugins\$(ProjectName) /mir" IgnoreExitCode="true"></Exec>
-  </Target>
 </Project>
