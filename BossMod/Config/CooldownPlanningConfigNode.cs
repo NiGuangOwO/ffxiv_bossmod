@@ -173,10 +173,7 @@ namespace BossMod
         {
             if (sm == null)
                 return;
-            var editor = new CooldownPlanEditor(plan, sm, moduleInfo, NotifyModified);
-            var w = WindowManager.CreateWindow($"冷却计划", editor.Draw, () => { }, () => true);
-            w.SizeHint = new(600, 600);
-            w.MinSize = new(100, 100);
+            new CooldownPlanEditorWindow(plan, sm, moduleInfo, NotifyModified);
         }
 
         private void StartPlanEditor(CooldownPlan plan)

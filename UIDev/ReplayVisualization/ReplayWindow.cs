@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace UIDev
 {
-    class ReplayWindow : SimpleWindow
+    class ReplayWindow : UIWindow
     {
         private ReplayPlayer _player;
         private BossModuleManager _mgr;
@@ -30,7 +30,7 @@ namespace UIDev
         private Positional _pfPositional = Positional.Any;
         private bool _pfTank = false;
 
-        public ReplayWindow(Replay data) : base($"Replay: {data.Path}")
+        public ReplayWindow(Replay data) : base($"Replay: {data.Path}", true, new(1500, 1000))
         {
             _player = new(data);
             _mgr = new(_player.WorldState);
@@ -40,8 +40,6 @@ namespace UIDev
             _config = new(Service.Config, _player.WorldState);
             _events = new(data, MoveTo);
             _analysis = new(data);
-            Size = new(1500, 1000);
-            SizeCondition = ImGuiCond.Once;
         }
 
         public override void Draw()
@@ -68,7 +66,7 @@ namespace UIDev
                     var sm = _mgr.ActiveModule.StateMachine;
                     if (ImGui.Button("Show timeline"))
                     {
-                        new StateMachineWindow(_mgr.ActiveModule).Register();
+                        new StateMachineWindow(_mgr.ActiveModule);
                     }
                     ImGui.SameLine();
                     _mgr.ActiveModule.PlanConfig?.DrawSelectionUI(_mgr.ActiveModule.Raid[_povSlot]?.Class ?? Class.None, sm, _mgr.ActiveModule.Info);

@@ -34,7 +34,7 @@ namespace UIDev
                 DrawContents(null, null);
                 DrawUserMarkers();
             }
-            foreach (var e in _tree.Nodes(_replay.Encounters, e => new($"{ModuleRegistry.FindByOID(e.OID)?.ModuleType.Name}: {e.InstanceID:X}, zone={e.Zone}, start={e.Time.Start:O}, duration={e.Time}")))
+            foreach (var e in _tree.Nodes(_replay.Encounters, e => new($"{ModuleRegistry.FindByOID(e.OID)?.ModuleType.Name}: {e.InstanceID:X}, zone={e.Zone}, start={e.Time.Start:O}, duration={e.Time}, countdown on pull={e.CountdownOnPull:f3}")))
             {
                 var moduleInfo = ModuleRegistry.FindByOID(e.OID);
                 foreach (var n in _tree.Node("Raw ops", contextMenu: () => OpListContextMenu(_opListsFiltered.GetValueOrDefault(e))))
@@ -239,10 +239,7 @@ namespace UIDev
 
         private void OpenTimeline(Replay.Encounter enc, BitMask showPlayers)
         {
-            var tl = new ReplayTimeline(_replay, enc, showPlayers);
-            var w = WindowManager.CreateWindow($"Replay timeline: {_replay.Path} @ {enc.Time.Start:O}", tl.Draw, tl.Close, () => true);
-            w.SizeHint = new(1200, 1000);
-            w.MinSize = new(100, 100);
+            new ReplayTimelineWindow(_replay, enc, showPlayers);
         }
 
         private void DrawTimelines(Replay.Encounter enc)

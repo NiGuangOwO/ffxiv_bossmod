@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace BossMod
 {
-    class DebugUI : IDisposable
+    class MainDebugWindow : UIWindow
     {
         private WorldState _ws;
         private Autorotation _autorot;
@@ -21,7 +21,7 @@ namespace BossMod
         private DebugAddon _debugAddon = new();
         private DebugTiming _debugTiming = new();
 
-        public DebugUI(WorldState ws, Autorotation autorot)
+        public MainDebugWindow(WorldState ws, Autorotation autorot) : base("Boss mod debug UI", false, new(300, 200))
         {
             _ws = ws;
             _autorot = autorot;
@@ -31,14 +31,14 @@ namespace BossMod
             _debugClassDefinitions = new(ws);
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
             _debugInput.Dispose();
             _debugClassDefinitions.Dispose();
             _debugAddon.Dispose();
         }
 
-        public unsafe void Draw()
+        public unsafe override void Draw()
         {
             var player = Service.ClientState.LocalPlayer;
             ImGui.TextUnformatted($"Current zone: {_ws.CurrentZone}, player=0x{(ulong)Utils.GameObjectInternal(player):X}, playerCID={Service.ClientState.LocalContentId:X}, pos = {Utils.Vec3String(player?.Position ?? new Vector3())}");
@@ -136,6 +136,10 @@ namespace BossMod
             if (ImGui.CollapsingHeader("Timing"))
             {
                 _debugTiming.Draw();
+            }
+            if (ImGui.CollapsingHeader("Window system"))
+            {
+                DrawWindowSystem();
             }
         }
 
@@ -251,6 +255,15 @@ namespace BossMod
             ImGui.TextUnformatted($"Active: {agent->Active != 0}");
             ImGui.TextUnformatted($"Initiator: {Utils.ObjectString(agent->Initiator)}");
             ImGui.TextUnformatted($"Time left: {agent->Timer:f3}");
+        }
+
+        private void DrawWindowSystem()
+        {
+            ImGui.TextUnformatted($"Any focus: {Service.WindowSystem!.HasAnyFocus}");
+            foreach (var w in Service.WindowSystem.Windows)
+            {
+                ImGui.TextUnformatted($"{w.WindowName}: focus={w.IsFocused}");
+            }
         }
     }
 }

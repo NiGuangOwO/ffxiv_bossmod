@@ -66,11 +66,13 @@ namespace UIDev
                 // this hack is needed to ensure we use correct global scale
                 newFrame.Invoke();
                 Service.WindowSystem.Draw();
-                WindowManager.DrawAll();
             };
 
-            new UITestWindow(scene, Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncher", "pluginConfigs", "BossMod.json")).Register();
+            var configPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncher", "pluginConfigs", "BossMod.json");
+            var mainWindow = new UITestWindow(scene, configPath);
+            mainWindow.IsOpen = true;
             scene.Run();
+            mainWindow.Dispose();
         }
 
         private static unsafe void InitializeDalamudStyle()

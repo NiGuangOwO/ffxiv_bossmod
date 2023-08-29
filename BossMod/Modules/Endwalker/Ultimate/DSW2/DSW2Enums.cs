@@ -65,6 +65,8 @@
         HraesvelgrP6 = 0x3145, // R19.000, x1 - p6
         ScarletPrice = 0x33B6, // R1.000, spawn during p6
         VoidzoneAhkMorn = 0x1EB683, // R0.500, EventObj type, spawn during p6
+
+        DragonKingThordan = 0x3148, // R8.000, x1 - p7
     };
 
     public enum AID : uint
@@ -281,6 +283,31 @@
         Touchdown = 27968, // NidhoggP6/HraesvelgrP6->self, no cast, single-target, visual (proximity)
         TouchdownAOE = 28903, // Helper->self, no cast, range 80 circle with ? falloff
         RevengeOfTheHordeP6 = 27937, // NidhoggP6/HraesvelgrP6->self, 25.0s cast, range 80 circle, enrage
+
+        // phase 7
+        ShockwaveP7 = 29156, // Helper->self, no cast, range 100 circle, raidwide
+        TransitionP71 = 25587, // LeftEye/RightEye->BossP5, no cast, single-target, visual (absorb eye)
+        TransitionP72 = 29365, // LeftEye->BossP5, no cast, single-target, visual (???)
+        TransitionP73 = 25588, // LeftEye->BossP5, no cast, single-target, visual (???)
+        AlternativeEnd = 29752, // Helper->self, no cast, range 100 circle, raidwide
+        FlamesOfAscalon = 28049, // Helper->self, no cast, range 8 circle
+        IceOfAscalon = 28050, // Helper->self, no cast, range 8-50 donut
+        ExaflaresEdge = 28059, // DragonKingThordan->self, 6.0s cast, single-target, visual (exaflares)
+        ExaflaresEdgeFirst = 28060, // Helper->self, 6.9s cast, range 6 circle
+        ExaflaresEdgeRest = 28061, // Helper->location, no cast, range 6 circle
+        Trinity = 28062, // DragonKingThordan->self, no cast, single-target, visual
+        TrinityAOE1 = 28063, // Helper->players, no cast, range 3 circle (dark)
+        TrinityAOE2 = 28064, // Helper->players, no cast, range 3 circle (light)
+        TrinityAOE3 = 28065, // Helper->players, no cast, range 3 circle (dark+light)
+        AkhMornsEdge = 28051, // DragonKingThordan->self, 6.0s cast, single-target, visual (towers)
+        AkhMornsEdgeVisual1 = 28052, // DragonKingThordan->self, no cast, single-target
+        AkhMornsEdgeVisual2 = 28053, // DragonKingThordan->self, no cast, single-target
+        AkhMornsEdgeAOEFirstNormal1 = 29452, // Helper->self, 6.7s cast, range 4 circle tower
+        AkhMornsEdgeAOEFirstNormal2 = 29453, // Helper->self, 6.7s cast, range 4 circle tower
+        AkhMornsEdgeAOEFirstTanks = 29454, // Helper->self, 6.7s cast, range 4 circle tower (for tanks)
+        AkhMornsEdgeAOERestNormal = 28054, // Helper->self, no cast, range 4 circle tower secondary
+        AkhMornsEdgeAOERestTanks = 28055, // Helper->self, no cast, range 4 circle tower secondary (for tanks)
+        AkhMornsEdgeAOEFail = 28056, // Helper->self, no cast, range 60 circle tower fail
     };
 
     public enum SID : uint
@@ -307,6 +334,7 @@
         EntangledFlames = 2759, // none->player, extra=0x0
         Boiling = 2898, // Helper->player, extra=0x0
         Freezing = 2899, // Helper->player, extra=0x0
+        GenericMechanic = 2056, // none->SerAdelphel/Haurchefant/DragonKingThordan, extra=0x1B6/0x127/0x12A (fire sword)/0x12B (ice sword)
     }
 
     public enum TetherID : uint

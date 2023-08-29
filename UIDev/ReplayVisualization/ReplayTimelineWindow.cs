@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace UIDev
 {
-    class ReplayTimeline
+    class ReplayTimelineWindow : UIWindow
     {
         private Replay _replay;
         private Replay.Encounter _encounter;
@@ -17,10 +17,10 @@ namespace UIDev
         private ColumnStateMachineBranch _colStates;
         private ColumnEnemiesDetails _colEnemies;
         private ColumnPlayersDetails _colPlayers;
-        private WindowManager.Window? _config;
+        private UISimpleWindow? _config;
         private UITree _configTree = new();
 
-        public ReplayTimeline(Replay replay, Replay.Encounter enc, BitMask showPlayers)
+        public ReplayTimelineWindow(Replay replay, Replay.Encounter enc, BitMask showPlayers) : base($"Replay timeline: {replay.Path} @ {enc.Time.Start:O}", true, new(1200, 1000))
         {
             _replay = replay;
             _encounter = enc;
@@ -33,22 +33,25 @@ namespace UIDev
             _timeline.Columns.Add(new ColumnSeparator(_timeline));
             _colEnemies = _timeline.Columns.Add(new ColumnEnemiesDetails(_timeline, _stateTree, _phaseBranches, replay, enc));
             _colPlayers = _timeline.Columns.Add(new ColumnPlayersDetails(_timeline, _stateTree, _phaseBranches, replay, enc, showPlayers));
+
+            if (IsOpen)
+            {
+                _config = new($"Replay timeline config: {_replay.Path} @ {_encounter.Time.Start:O}", DrawConfig, false, new(600, 600));
+            }
         }
 
-        public void Draw()
+        protected override void Dispose(bool disposing)
         {
-            if (ImGui.Button(_config == null ? "Show config" : "Hide config"))
+            _config?.Dispose();
+        }
+
+        public override void PreOpenCheck() => RespectCloseHotkey = !_colPlayers.AnyPlanModified;
+
+        public override void Draw()
+        {
+            if (_config != null && ImGui.Button(!_config.IsOpen ? "Show config" : "Hide config"))
             {
-                if (_config == null)
-                {
-                    _config = WindowManager.CreateWindow($"Replay timeline config: {_replay.Path} @ {_encounter.Time.Start:O}", DrawConfig, () => _config = null, () => true);
-                    _config.SizeHint = new(600, 600);
-                    _config.MinSize = new(100, 100);
-                }
-                else
-                {
-                    WindowManager.CloseWindow(_config);
-                }
+                _config.Toggle();
             }
             ImGui.SameLine();
             if (ImGui.Button($"Save {(_colPlayers.AnyPlanModified ? "all changes" : "(no changes)")}"))
@@ -57,12 +60,6 @@ namespace UIDev
             }
 
             _timeline.Draw();
-        }
-
-        public void Close()
-        {
-            if (_config != null)
-                WindowManager.CloseWindow(_config);
         }
 
         private void DrawConfig()
