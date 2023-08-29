@@ -16,9 +16,9 @@ namespace BossMod
         private Network _network;
         private WorldStateGame _ws;
         private BossModuleManager _bossmod;
-        private Autorotation _autorotation;
-        private AI.AIManager _ai;
-        private AI.Broadcast _broadcast;
+        //private Autorotation _autorotation;
+        //private AI.AIManager _ai;
+        //private AI.Broadcast _broadcast;
         private TimeSpan _prevUpdateTime;
 
         // windows
@@ -26,7 +26,7 @@ namespace BossMod
         private BossModulePlanWindow _wndBossmodPlan;
         private BossModuleHintsWindow _wndBossmodHints;
         private ReplayRecorderWindow _wndReplayRecorder;
-        private MainDebugWindow _wndDebug;
+        //private MainDebugWindow _wndDebug;
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface dalamud,
@@ -68,7 +68,7 @@ namespace BossMod
             _wndBossmodPlan = new(_bossmod);
             _wndBossmodHints = new(_bossmod);
             _wndReplayRecorder = new(_ws, recorderSettings);
-            _wndDebug = new(_ws, _autorotation);
+            //_wndDebug = new(_ws, _autorotation);
 
             dalamud.UiBuilder.DisableAutomaticUiHide = true;
             dalamud.UiBuilder.Draw += DrawUI;
@@ -78,7 +78,7 @@ namespace BossMod
         public void Dispose()
         {
             Service.Condition.ConditionChange -= OnConditionChanged;
-            _wndDebug.Dispose();
+            //_wndDebug.Dispose();
             _wndReplayRecorder.Dispose();
             _wndBossmodHints.Dispose();
             _wndBossmodPlan.Dispose();
@@ -105,8 +105,8 @@ namespace BossMod
             switch (split[0])
             {
                 case "d":
-                    _wndDebug.IsOpen = true;
-                    _wndDebug.BringToFront();
+                    //_wndDebug.IsOpen = true;
+                    //_wndDebug.BringToFront();
                     break;
                 case "cfg":
                     var output = Service.Config.ConsoleCommand(new ArraySegment<string>(split, 1, split.Length - 1));
