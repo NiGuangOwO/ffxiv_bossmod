@@ -65,9 +65,9 @@ namespace BossMod
             //_broadcast = new();
 
             _wndBossmod = new(_bossmod);
-            _wndBossmodPlan = new(_bossmod);
-            _wndBossmodHints = new(_bossmod);
-            _wndReplayRecorder = new(_ws, recorderSettings);
+            //_wndBossmodPlan = new(_bossmod);
+            //_wndBossmodHints = new(_bossmod);
+            //_wndReplayRecorder = new(_ws, recorderSettings);
             //_wndDebug = new(_ws, _autorotation);
 
             dalamud.UiBuilder.DisableAutomaticUiHide = true;
@@ -79,9 +79,9 @@ namespace BossMod
         {
             Service.Condition.ConditionChange -= OnConditionChanged;
             //_wndDebug.Dispose();
-            _wndReplayRecorder.Dispose();
-            _wndBossmodHints.Dispose();
-            _wndBossmodPlan.Dispose();
+            //_wndReplayRecorder.Dispose();
+            //_wndBossmodHints.Dispose();
+            //_wndBossmodPlan.Dispose();
             _wndBossmod.Dispose();
             _bossmod.Dispose();
             _network.Dispose();
