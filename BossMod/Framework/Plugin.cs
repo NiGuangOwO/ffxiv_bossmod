@@ -16,9 +16,9 @@ namespace BossMod
         private Network _network;
         private WorldStateGame _ws;
         private BossModuleManager _bossmod;
-        //private Autorotation _autorotation;
-        //private AI.AIManager _ai;
-        //private AI.Broadcast _broadcast;
+        private Autorotation _autorotation;
+        private AI.AIManager _ai;
+        private AI.Broadcast _broadcast;
         private TimeSpan _prevUpdateTime;
 
         // windows
@@ -26,7 +26,7 @@ namespace BossMod
         private BossModulePlanWindow _wndBossmodPlan;
         private BossModuleHintsWindow _wndBossmodHints;
         private ReplayRecorderWindow _wndReplayRecorder;
-        //private MainDebugWindow _wndDebug;
+        private MainDebugWindow _wndDebug;
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface dalamud,
@@ -104,10 +104,10 @@ namespace BossMod
 
             switch (split[0])
             {
-                case "d":
-                    //_wndDebug.IsOpen = true;
-                    //_wndDebug.BringToFront();
-                    break;
+                //case "d":
+                //    _wndDebug.IsOpen = true;
+                //    _wndDebug.BringToFront();
+                //    break;
                 case "cfg":
                     var output = Service.Config.ConsoleCommand(new ArraySegment<string>(split, 1, split.Length - 1));
                     foreach (var msg in output)
