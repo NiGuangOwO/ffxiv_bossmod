@@ -6,8 +6,9 @@ using Dalamud.Memory;
 using System;
 using System.IO;
 using System.Numerics;
-using System.Text;
+using System.Runtime.InteropServices;
 using static BossMod.Protocol;
+using System.Text;
 
 namespace BossMod
 {
@@ -54,7 +55,7 @@ namespace BossMod
 
             // this is lifted from dalamud - for some reason they stopped dispatching client messages :(
             //Service.GameNetwork.NetworkMessage += HandleMessage;
-            var processZonePacketDownAddress = Service.SigScanner.ScanText("40 55 56 57 48 8D 6C 24 B9 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 37 8B FA");
+            var processZonePacketDownAddress = Service.SigScanner.ScanText("40 ?? 56 57 48 ?? ?? ?? ?? 48 ?? ?? ?? ?? ?? ?? 48 ?? ?? ?? ?? ?? ?? 48 ?? ?? 48 89 45 ?? 8b");
             _processZonePacketDownHook = Hook<ProcessZonePacketDownDelegate>.FromAddress(processZonePacketDownAddress, ProcessZonePacketDownDetour);
             _processZonePacketDownHook.Enable();
 
@@ -103,9 +104,10 @@ namespace BossMod
             HandleMessage((IntPtr)dataPtr + 0x20, Utils.ReadField<ushort>(dataPtr, 0), 0, 0, NetworkMessageDirection.ZoneUp, Utils.ReadField<uint>(dataPtr, 8));
             return _processZonePacketUpHook.Original(self, dataPtr, a3, a4);
         }
+
         private unsafe byte ProcessReplayPacketDetour(IntPtr replayModule, ReplayPacketHeader* header, IntPtr dataPtr)
         {
-            HandleMessage(dataPtr, header->MessageType, 0, header->TargetId, NetworkMessageDirection.ZoneDown, 0);
+            HandleMessage(dataPtr, header->MessageType, 0, header->TargetId, NetworkMessageDirection.ZoneDown, header->Size);
             return _processReplayPacketHook.Original(replayModule, header, dataPtr);
         }
 

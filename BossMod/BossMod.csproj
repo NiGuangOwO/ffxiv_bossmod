@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors></Authors>
     <Company></Company>
-    <Version>0.0.0.110</Version>
+    <Version>0.0.0.111</Version>
     <Description>Boss mod.</Description>
     <Copyright></Copyright>
     <PackageProjectUrl></PackageProjectUrl>
@@ -19,10 +19,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
-
-<!--  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>$(AppData)\XIVLauncher\devPlugins\BossMod\</OutputPath>
-  </PropertyGroup>-->
 
   <ItemGroup>
     <Content Include="BossMod.json">
