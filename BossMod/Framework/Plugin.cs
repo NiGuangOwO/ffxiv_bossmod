@@ -71,7 +71,7 @@ namespace BossMod
             _ws = new(_network);
             _bossmod = new(_ws);
             //_autorotation = new(_bossmod);
-            //_ai = new(ActionManagerEx.Instance.InputOverride, _autorotation);
+            //_ai = new(_autorotation);
             //_broadcast = new();
 
             _wndBossmod = new(_bossmod);
@@ -152,9 +152,9 @@ namespace BossMod
             Camera.Instance?.Update();
             _ws.Update(_prevUpdateTime);
             _bossmod.Update();
-            _autorotation.Update();
-            _ai.Update();
-            _broadcast.Update();
+            //_autorotation.Update();
+            //_ai.Update();
+            //_broadcast.Update();
 
             bool uiHidden = Service.GameGui.GameUiHidden || Service.Condition[ConditionFlag.OccupiedInCutSceneEvent] || Service.Condition[ConditionFlag.WatchingCutscene78] || Service.Condition[ConditionFlag.WatchingCutscene];
             if (!uiHidden)
