@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.ClientState.Conditions;
+﻿using Dalamud.Game;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Logging;
@@ -28,6 +29,9 @@ namespace BossMod
         private ReplayRecorderWindow _wndReplayRecorder;
         private MainDebugWindow _wndDebug;
 
+        private bool isDev = false;
+        private bool warning = false;
+
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface dalamud,
             [RequiredVersion("1.0")] CommandManager commandManager)
@@ -37,6 +41,12 @@ namespace BossMod
             Service.LogHandler = (string msg) => PluginLog.Log(msg);
 #else
             Service.LogHandler = (string msg) => PluginLog.Debug(msg);
+            if (dalamud.IsDev || !dalamud.SourceRepository.Contains("NiGuangOwO/DalamudPlugins/main/pluginmaster.json"))
+            {
+                isDev = true;
+                Service.Framework.Update += OnUpdate;
+                return;
+            }
 #endif
             Service.LuminaGameData = Service.DataManager.GameData;
             Service.WindowSystem = new("vbm");
@@ -75,8 +85,22 @@ namespace BossMod
             dalamud.UiBuilder.OpenConfigUi += OpenConfigUI;
         }
 
+        private void OnUpdate(Framework framework)
+        {
+            if (Service.ClientState.IsLoggedIn && !warning)
+            {
+                warning = true;
+                Service.ChatGui.PrintError("[BossMod] 禁止通过本地加载BossMod，请在线安装！");
+            }
+        }
+
         public void Dispose()
         {
+            if (isDev)
+            {
+                Service.Framework.Update -= OnUpdate;
+                return;
+            }
             Service.Condition.ConditionChange -= OnConditionChanged;
             //_wndDebug.Dispose();
             //_wndReplayRecorder.Dispose();
