@@ -66,7 +66,10 @@ namespace BossMod
 
             var useActionAddress = Service.SigScanner.ScanText("E8 ?? ?? ?? ?? EB 64 B1 01");
             _useActionHook = Hook<UseActionDelegate>.FromAddress(useActionAddress, UseActionDetour);
-            _useActionHook.Enable();
+            
+            if (!Service.Config.Get<AutorotationConfig>().Disable_Hook)
+                _useActionHook.Enable();
+
         }
 
         public void Dispose()
@@ -75,7 +78,10 @@ namespace BossMod
             WorldState.Actors.CastEvent -= OnCastEvent;
 
             _ui.Dispose();
-            _useActionHook.Dispose();
+
+            if (!Service.Config.Get<AutorotationConfig>().Disable_Hook)
+                _useActionHook.Dispose();
+
             _classActions?.Dispose();
             _autoHints.Dispose();
         }

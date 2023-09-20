@@ -3,6 +3,9 @@
     [ConfigDisplay(Name = "自动循环设置 (实验性!)", Order = 5)]
     class AutorotationConfig : ConfigNode
     {
+        [PropertyDisplay("禁用UseAction Hook(提高兼容性, 但将无法使用自动输出, 更改后重载)")]
+        public bool Disable_Hook = true;
+
         [PropertyDisplay("启用自动循环")]
         public bool Enabled = false;
 
