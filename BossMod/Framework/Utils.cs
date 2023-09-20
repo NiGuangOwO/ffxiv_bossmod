@@ -108,15 +108,15 @@ namespace BossMod
         public static unsafe float GameObjectRadius(GameObject obj) => GameObjectInternal(obj)->GetRadius();
         //public static unsafe Vector3 GameObjectNonInterpolatedPosition(GameObject obj) => ReadField<Vector3>(GameObjectInternal(obj), 0x10);
         //public static unsafe float GameObjectNonInterpolatedRotation(GameObject obj) => ReadField<float>(GameObjectInternal(obj), 0x20);
-        public static unsafe byte CharacterShieldValue(Character chr) => CharacterInternal(chr)->ShieldValue; // % of max hp; see effect result
-        public static unsafe bool CharacterInCombat(Character chr) => (ReadField<byte>(CharacterInternal(chr), 0x1B1B) & 0x2) != 0; // see actor control 4
+        public static unsafe byte CharacterShieldValue(Character chr) => CharacterInternal(chr)->CharacterData.ShieldValue; // % of max hp; see effect result
+        public static unsafe bool CharacterInCombat(Character chr) => (ReadField<byte>(CharacterInternal(chr), 0x1F2) & 0x20) != 0; // see actor control 4
         public static unsafe byte CharacterAnimationState(Character chr, bool second) => ReadField<byte>(CharacterInternal(chr), second ? 0x1B2B : 0x1B2A); // see actor control 62 // 41 88 86 ? ? ? ? E8 ? ? ? ? 0F 28 CE (second, first one just second - 1 and the first one just above the second one)
         public static unsafe byte CharacterModelState(Character chr) => ReadField<byte>(CharacterInternal(chr), 0x1B2C); // see actor control 63 // 41 88 86 ? ? 00 00 49 8B CE 41 0F B6 ?
         public static unsafe float CharacterCastRotation(Character chr) => ReadField<float>(CharacterInternal(chr), 0x1AD0); // see ActorCast -> Character::StartCast // F3 0F 11 97 ? ? ? ? F6 43
         public static unsafe ulong CharacterTargetID(Character chr) => ReadField<ulong>(CharacterInternal(chr), 0x1AB8); // until FFXIVClientStructs fixes offset and type... // e8 ? ? ? ? f3 ? ? ? ? ? ? ? 48 ? ? 75 - go inside function, mov rax, [rbx + %offset%]
         public static unsafe byte CharacterTetherID(Character chr) => ReadField<byte>(CharacterInternal(chr), 0x1A50); // see ActorControl -> Tether -> Character::SetTether (note that there is also a secondary tether...)
         public static unsafe ulong CharacterTetherTargetID(Character chr) => ReadField<ulong>(CharacterInternal(chr), 0x1A60); // CharacterTetherId + 0x10 (maybe)
-        public static unsafe Vector3 BattleCharaCastLocation(BattleChara chara) => BattleCharaInternal(chara)->SpellCastInfo.CastLocation; // see ActorCast -> Character::StartCast -> Character::StartOmen
+        public static unsafe Vector3 BattleCharaCastLocation(BattleChara chara) => BattleCharaInternal(chara)->GetCastInfo->CastLocation; // see ActorCast -> Character::StartCast -> Character::StartOmen
 
         public static unsafe uint FrameIndex() => FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance()->FrameCounter;
         public static unsafe ulong FrameQPF() => ReadField<ulong>(FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance(), 0x16A0);
