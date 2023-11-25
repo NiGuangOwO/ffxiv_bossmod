@@ -84,6 +84,8 @@ namespace BossMod
             return CastTimeString((float)(cast.FinishAt - now).TotalSeconds, cast.TotalTime);
         }
 
+        public static string LogMessageString(uint id) => $"{id} '{Service.LuminaRow<Lumina.Excel.GeneratedSheets.LogMessage>(id)?.Text}'";
+
         public static unsafe T ReadField<T>(void* address, int offset) where T : unmanaged
         {
             return *(T*)((IntPtr)address + offset);
@@ -124,6 +126,12 @@ namespace BossMod
         public static unsafe float FrameDuration() => FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance()->FrameDeltaTime;
         public static unsafe float FrameDurationRaw() => ReadField<float>(FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance(), 0x16BC);
         public static unsafe float TickSpeedMultiplier() => ReadField<float>(FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance(), 0x17B0);
+
+        public static unsafe ulong MouseoverID()
+        {
+            var pronoun = FFXIVClientStructs.FFXIV.Client.UI.Misc.PronounModule.Instance();
+            return pronoun != null && pronoun->UiMouseOverTarget != null ? pronoun->UiMouseOverTarget->ObjectID : 0;
+        }
 
         public static unsafe ulong SceneObjectFlags(FFXIVClientStructs.FFXIV.Client.Graphics.Scene.Object* o)
         {
@@ -254,6 +262,14 @@ namespace BossMod
 
         // linear interpolation
         public static float Lerp(float a, float b, float t) => a + (b - a) * t;
+
+        // build an array with N copies of same element
+        public static T[] MakeArray<T>(int count, T value)
+        {
+            var res = new T[count];
+            Array.Fill(res, value);
+            return res;
+        }
 
         // get all types defined in specified assembly
         public static IEnumerable<Type?> GetAllTypes(Assembly asm)

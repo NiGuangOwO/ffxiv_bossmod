@@ -1,3 +1,5 @@
+**Discord**: https://discord.gg/Zzrcc8kmvy
+
 This plugin consists of several interrelated parts which can be enabled or disabled independently.
 
 # Boss modules ("radar")
@@ -34,7 +36,7 @@ Allows creating a plan (e.g. "Cast Vengeance right before this particular tankbu
 This is still work-in-progress, in future it should allow creating cooldown plans for whole raid and sharing.
 
 # Install instructions:
-1. esc -> dalamud settings -> experimental -> custom plugin repositories, add https://raw.githubusercontent.com/awgil/ffxiv_plugin_distribution/master/pluginmaster.json
+1. esc -> dalamud settings -> experimental -> custom plugin repositories, add https://puni.sh/api/repository/veyn
 2. esc -> dalamud plugins -> all plugins -> find "Boss Mod" and install
 3. settings are accessible either via esc menu or /vbm console command
 
