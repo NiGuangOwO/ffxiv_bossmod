@@ -52,10 +52,10 @@ namespace BossMod
 
         // windows
         private BossModuleMainWindow _wndBossmod;
-        private BossModulePlanWindow _wndBossmodPlan;
-        private BossModuleHintsWindow _wndBossmodHints;
-        private ReplayManagementWindow _wndReplay;
-        private MainDebugWindow _wndDebug;
+        //private BossModulePlanWindow _wndBossmodPlan;
+        //private BossModuleHintsWindow _wndBossmodHints;
+        //private ReplayManagementWindow _wndReplay;
+        //private MainDebugWindow _wndDebug;
 
         private bool isDev = false;
         private bool warning = false;
@@ -71,12 +71,12 @@ namespace BossMod
 
             dalamud.Create<Service>();
             Service.LogHandler = (string msg) => Service.Logger.Debug(msg);
-            if (dalamud.IsDev || !dalamud.SourceRepository.Contains("NiGuangOwO/DalamudPlugins/main/pluginmaster.json"))
-            {
-                isDev = true;
-                Service.Framework.Update += OnUpdate;
-                return;
-            }
+            //if (dalamud.IsDev || !dalamud.SourceRepository.Contains("NiGuangOwO/DalamudPlugins/main/pluginmaster.json"))
+            //{
+            //    isDev = true;
+            //    Service.Framework.Update += OnUpdate;
+            //    return;
+            //}
             Service.LuminaGameData = Service.DataManager.GameData;
             Service.WindowSystem = new("vbm");
             //Service.Device = pluginInterface.UiBuilder.Device;
@@ -114,17 +114,17 @@ namespace BossMod
             // _broadcast = new();
 
             _wndBossmod = new(_bossmod);
-            _wndBossmodPlan = new(_bossmod);
-            _wndBossmodHints = new(_bossmod);
-            _wndReplay = new(_ws, dalamud.ConfigDirectory);
-            _wndDebug = new(_ws, null);
+            //_wndBossmodPlan = new(_bossmod);
+            //_wndBossmodHints = new(_bossmod);
+            //_wndReplay = new(_ws, dalamud.ConfigDirectory);
+            //_wndDebug = new(_ws, null);
 
             dalamud.UiBuilder.DisableAutomaticUiHide = true;
             dalamud.UiBuilder.Draw += DrawUI;
             dalamud.UiBuilder.OpenConfigUi += OpenConfigUI;
         }
 
-        private void OnUpdate(Framework framework)
+        private void OnUpdate(IFramework framework)
         {
             if (Service.ClientState.IsLoggedIn && !warning)
             {
@@ -181,9 +181,9 @@ namespace BossMod
                     GC.WaitForPendingFinalizers();
                     GC.Collect();
                     break;
-                case "r":
-                    _wndReplay.SetVisible(!_wndReplay.IsOpen);
-                    break;
+                //case "r":
+                //    _wndReplay.SetVisible(!_wndReplay.IsOpen);
+                //    break;
             }
         }
 

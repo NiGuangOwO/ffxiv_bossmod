@@ -7,7 +7,7 @@
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/awgil/ffxiv_bossmod",
   "IconUrl": "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/f4efcb5dc279d21ee16185d5a9f2d09a3a2bc58b/Data/icon.png",
-  "DalamudApiLevel": 8,
+  "DalamudApiLevel": 9,
   "ImageUrls": [
     "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image1.png",
     "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image2.png",
