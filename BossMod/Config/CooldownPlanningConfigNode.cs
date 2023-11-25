@@ -1,4 +1,4 @@
-using Dalamud.Logging;
+﻿using Dalamud.Interface.Utility.Raii;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -101,7 +101,7 @@ namespace BossMod
                             StartPlanEditor(plan);
                         }
                         ImGui.SameLine();
-                        if (ImGui.Button($"删除"))
+                        if (UIMisc.DangerousButton($"Delete"))
                         {
                             if (plans.SelectedIndex == i)
                                 plans.SelectedIndex = -1;

@@ -64,12 +64,8 @@ namespace BossMod
             ActionManagerEx.Instance!.ActionRequested += OnActionRequested;
             WorldState.Actors.CastEvent += OnCastEvent;
 
-            var useActionAddress = Service.SigScanner.ScanText("E8 ?? ?? ?? ?? EB 64 B1 01");
-            _useActionHook = Hook<UseActionDelegate>.FromAddress(useActionAddress, UseActionDetour);
-            
-            if (!Service.Config.Get<AutorotationConfig>().Disable_Hook)
-                _useActionHook.Enable();
-
+            _useActionHook = Service.Hook.HookFromSignature<UseActionDelegate>("E8 ?? ?? ?? ?? EB 64 B1 01", UseActionDetour);
+            _useActionHook.Enable();
         }
 
         public void Dispose()
@@ -90,7 +86,7 @@ namespace BossMod
         {
             var player = WorldState.Party.Player();
             PrimaryTarget = WorldState.Actors.Find(player?.TargetID ?? 0);
-            SecondaryTarget = WorldState.Actors.Find(Mouseover.Instance?.Object?.ObjectId ?? 0);
+            SecondaryTarget = WorldState.Actors.Find(Utils.MouseoverID());
 
             Hints.Clear();
             if (player != null)
@@ -176,7 +172,7 @@ namespace BossMod
             ImGui.TextUnformatted($"GCD={Cooldowns[CommonDefinitions.GCDGroup]:f3}, AnimLock={EffAnimLock:f3}+{AnimLockDelay:f3}, Combo={state.ComboTimeLeft:f3}");
         }
 
-        private void OnActionRequested(object? sender, ClientActionRequest request)
+        private void OnActionRequested(ClientActionRequest request)
         {
             _classActions?.NotifyActionExecuted(request);
         }
