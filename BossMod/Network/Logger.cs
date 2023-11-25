@@ -70,9 +70,9 @@ namespace BossMod.Network
             foreach (byte b in payload)
                 sb.Append($"{b:X2}");
             var node = new TextNode(sb.ToString());
-            var child = DecodePacket(id, payload.GetPointer(0));
-            if (child != null)
-                node.AddChild(child);
+            //var child = DecodePacket(id, payload.GetPointer(0));
+            //if (child != null)
+            //    node.AddChild(child);
             LogNode(node, "");
         }
 

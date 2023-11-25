@@ -1,5 +1,5 @@
 ﻿using BossMod;
-using Dalamud.Interface.Utility;
+using Dalamud.Interface;
 using ImGuiNET;
 using ImGuiScene;
 using Microsoft.Win32;

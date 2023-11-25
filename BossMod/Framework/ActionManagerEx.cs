@@ -146,23 +146,23 @@ namespace BossMod
             _faceTargetFunc = Marshal.GetDelegateForFunctionPointer<FaceTargetDelegate>(faceTargetAddress);
             Service.Log($"[AMEx] FaceTarget address = 0x{faceTargetAddress:X}");
 
-            _updateHook = Service.Hook.HookFromSignature<UpdateDelegate>("48 8B C4 48 89 58 20 57 48 81 EC", UpdateDetour);
+            _updateHook = Hook<UpdateDelegate>.FromAddress(Service.SigScanner.ScanText("48 8B C4 48 89 58 20 57 48 81 EC"), UpdateDetour);
             _updateHook.Enable();
             Service.Log($"[AMEx] Update address = 0x{_updateHook.Address:X}");
 
-            _useActionLocationHook = Service.Hook.HookFromSignature<UseActionLocationDelegate>("E8 ?? ?? ?? ?? 3C 01 0F 85 ?? ?? ?? ?? EB 46", UseActionLocationDetour);
+            _useActionLocationHook = Hook<UseActionLocationDelegate>.FromAddress(Service.SigScanner.ScanText("E8 ?? ?? ?? ?? 3C 01 0F 85 ?? ?? ?? ?? EB 46"), UseActionLocationDetour);
             _useActionLocationHook.Enable();
             Service.Log($"[AMEx] UseActionLocation address = 0x{_useActionLocationHook.Address:X}");
 
-            _processPacketActionEffectHook = Service.Hook.HookFromSignature<ProcessPacketActionEffectDelegate>("E8 ?? ?? ?? ?? 48 8B 4C 24 68 48 33 CC E8 ?? ?? ?? ?? 4C 8D 5C 24 70 49 8B 5B 20 49 8B 73 28 49 8B E3 5F C3", ProcessPacketActionEffectDetour);
+            _processPacketActionEffectHook = Hook<ProcessPacketActionEffectDelegate>.FromAddress(Service.SigScanner.ScanText("E8 ?? ?? ?? ?? 48 8B 4C 24 68 48 33 CC E8 ?? ?? ?? ?? 4C 8D 5C 24 70 49 8B 5B 20 49 8B 73 28 49 8B E3 5F C3"), ProcessPacketActionEffectDetour);
             _processPacketActionEffectHook.Enable();
             Service.Log($"[AMEx] ProcessPacketActionEffect address = 0x{_processPacketActionEffectHook.Address:X}");
 
-            _processPacketEffectResultHook = Service.Hook.HookFromSignature<ProcessPacketEffectResultDelegate>("48 8B C4 44 88 40 18 89 48 08", ProcessPacketEffectResultDetour);
+            _processPacketEffectResultHook = Hook<ProcessPacketEffectResultDelegate>.FromAddress(Service.SigScanner.ScanText("48 8B C4 44 88 40 18 89 48 08"), ProcessPacketEffectResultDetour);
             _processPacketEffectResultHook.Enable();
             Service.Log($"[AMEx] ProcessPacketEffectResult address = 0x{_processPacketEffectResultHook.Address:X}");
 
-            _processPacketEffectResultBasicHook = Service.Hook.HookFromSignature<ProcessPacketEffectResultDelegate>("40 53 41 54 41 55 48 83 EC 40", ProcessPacketEffectResultBasicDetour);
+            _processPacketEffectResultBasicHook = Hook<ProcessPacketEffectResultDelegate>.FromAddress(Service.SigScanner.ScanText("40 53 41 54 41 55 48 83 EC 40"), ProcessPacketEffectResultBasicDetour);
             _processPacketEffectResultBasicHook.Enable();
             Service.Log($"[AMEx] ProcessPacketEffectResultBasic address = 0x{_processPacketEffectResultBasicHook.Address:X}");
         }
@@ -214,7 +214,7 @@ namespace BossMod
 
         public uint GetActionStatus(ActionID action, ulong target, bool checkRecastActive = true, bool checkCastingActive = true, uint* outOptExtraInfo = null)
         {
-            return _inst->GetActionStatus((FFXIVClientStructs.FFXIV.Client.Game.ActionType)action.Type, action.ID, target, checkRecastActive, checkCastingActive, outOptExtraInfo);
+            return _inst->GetActionStatus((FFXIVClientStructs.FFXIV.Client.Game.ActionType)action.Type, action.ID, (long)target, checkRecastActive, checkCastingActive, outOptExtraInfo);
         }
 
         // returns time in ms
@@ -229,7 +229,7 @@ namespace BossMod
 
         public bool UseAction(ActionID action, ulong targetID, uint itemLocation, uint callType, uint comboRouteID, bool* outOptGTModeStarted)
         {
-            return _inst->UseAction((FFXIVClientStructs.FFXIV.Client.Game.ActionType)action.Type, action.ID, targetID, itemLocation, callType, comboRouteID, outOptGTModeStarted);
+            return _inst->UseAction((FFXIVClientStructs.FFXIV.Client.Game.ActionType)action.Type, action.ID, (long)targetID, itemLocation, callType, comboRouteID, outOptGTModeStarted);
         }
 
         // skips queueing etc

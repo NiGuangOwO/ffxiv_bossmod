@@ -43,7 +43,7 @@ namespace BossMod.Network
         public unsafe PacketInterceptor()
         {
             // alternative signature: E8 ?? ?? ?? ?? 84 C0 0F 85 ?? ?? ?? ?? 48 8D 35 - seem to be changing from build to build
-            _fetchHook = Service.Hook.HookFromSignature<FetchReceivedPacketDelegate>("E8 ?? ?? ?? ?? 84 C0 0F 85 ?? ?? ?? ?? 44 0F B6 64 24", FetchReceivedPacketDetour);
+            _fetchHook = Hook<FetchReceivedPacketDelegate>.FromAddress(Service.SigScanner.ScanText("E8 ?? ?? ?? ?? 84 C0 0F 85 ?? ?? ?? ?? 44 0F B6 64 24"), FetchReceivedPacketDetour);
             Service.Log($"[NPI] FetchReceivedPacket address = 0x{_fetchHook.Address:X}");
 
             // potentially useful sigs from dalamud:

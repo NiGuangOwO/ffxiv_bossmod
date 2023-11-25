@@ -36,28 +36,28 @@ namespace BossMod
             _startTime = DateTime.Now;
             _startQPC = Utils.FrameQPC();
 
-            ActionManagerEx.Instance!.ActionRequested += OnActionRequested;
-            ActionManagerEx.Instance!.ActionEffectReceived += OnActionEffect;
-            ActionManagerEx.Instance!.EffectResultReceived += OnEffectResult;
+            //ActionManagerEx.Instance!.ActionRequested += OnActionRequested;
+            //ActionManagerEx.Instance!.ActionEffectReceived += OnActionEffect;
+            //ActionManagerEx.Instance!.EffectResultReceived += OnEffectResult;
 
-            _processPacketActorControlHook = Service.Hook.HookFromSignature<ProcessPacketActorControlDelegate>("E8 ?? ?? ?? ?? 0F B7 0B 83 E9 64", ProcessPacketActorControlDetour);
+            _processPacketActorControlHook = Hook<ProcessPacketActorControlDelegate>.FromAddress(Service.SigScanner.ScanText("E8 ?? ?? ?? ?? 0F B7 0B 83 E9 64"), ProcessPacketActorControlDetour);
             _processPacketActorControlHook.Enable();
             Service.Log($"[WSG] ProcessPacketActorControl address = 0x{_processPacketActorControlHook.Address:X}");
 
-            _processEnvControlHook = Service.Hook.HookFromSignature<ProcessEnvControlDelegate>("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 8B FA 41 0F B7 E8", ProcessEnvControlDetour);
+            _processEnvControlHook = Hook<ProcessEnvControlDelegate>.FromAddress(Service.SigScanner.ScanText("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 8B FA 41 0F B7 E8"), ProcessEnvControlDetour);
             _processEnvControlHook.Enable();
             Service.Log($"[WSG] ProcessEnvControl address = 0x{_processEnvControlHook.Address:X}");
 
-            _processPacketRSVDataHook = Service.Hook.HookFromSignature<ProcessPacketRSVDataDelegate>("44 8B 09 4C 8D 41 34", ProcessPacketRSVDataDetour);
+            _processPacketRSVDataHook = Hook<ProcessPacketRSVDataDelegate>.FromAddress(Service.SigScanner.ScanText("44 8B 09 4C 8D 41 34"), ProcessPacketRSVDataDetour);
             _processPacketRSVDataHook.Enable();
             Service.Log($"[WSG] ProcessPacketRSVData address = 0x{_processPacketRSVDataHook.Address:X}");
         }
 
         public void Dispose()
         {
-            ActionManagerEx.Instance!.ActionRequested -= OnActionRequested;
-            ActionManagerEx.Instance!.ActionEffectReceived -= OnActionEffect;
-            ActionManagerEx.Instance!.EffectResultReceived -= OnEffectResult;
+            //ActionManagerEx.Instance!.ActionRequested -= OnActionRequested;
+            //ActionManagerEx.Instance!.ActionEffectReceived -= OnActionEffect;
+            //ActionManagerEx.Instance!.EffectResultReceived -= OnEffectResult;
             _processPacketActorControlHook.Dispose();
             _processEnvControlHook.Dispose();
             _processPacketRSVDataHook.Dispose();

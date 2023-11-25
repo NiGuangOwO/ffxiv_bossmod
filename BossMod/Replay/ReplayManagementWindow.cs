@@ -9,7 +9,7 @@ namespace BossMod
         private WorldState _ws;
         private DirectoryInfo _logDir;
         private ReplayManagementConfig _config;
-        private ReplayManager _manager;
+        //private ReplayManager _manager;
         private ReplayRecorder? _recorder;
         private string _message = "";
 
@@ -21,7 +21,7 @@ namespace BossMod
             _logDir = logDir;
             _config = Service.Config.Get<ReplayManagementConfig>();
             _config.Modified += ApplyConfig;
-            _manager = new(logDir.FullName);
+            //_manager = new(logDir.FullName);
             ApplyConfig(null, EventArgs.Empty);
             UpdateTitle();
             RespectCloseHotkey = false;
@@ -31,7 +31,7 @@ namespace BossMod
         {
             _config.Modified -= ApplyConfig;
             _recorder?.Dispose();
-            _manager.Dispose();
+            //_manager.Dispose();
         }
 
         public void SetVisible(bool vis)
@@ -45,7 +45,7 @@ namespace BossMod
 
         public override void PreOpenCheck()
         {
-            _manager.Update();
+            //_manager.Update();
         }
 
         public override void Draw()
@@ -83,7 +83,7 @@ namespace BossMod
             }
 
             ImGui.Separator();
-            _manager.Draw();
+            //_manager.Draw();
         }
 
         public override void OnClose()

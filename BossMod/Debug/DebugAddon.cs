@@ -1,5 +1,4 @@
 ﻿using Dalamud.Hooking;
-using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
@@ -71,7 +70,7 @@ namespace BossMod
                     {
                         var name = _newHook;
                         Hook<AddonReceiveEventDelegate> hook = null!;
-                        _rcvAddonHooks[address] = hook = Service.Hook.HookFromAddress<AddonReceiveEventDelegate>(address, (self, eventType, eventParam, eventData, inputData) =>
+                        _rcvAddonHooks[address] = hook = Hook<AddonReceiveEventDelegate>.FromAddress(address, (self, eventType, eventParam, eventData, inputData) =>
                         {
                             Service.Log($"RCV: listener={name} {(nint)self:X}, type={eventType}, param={eventParam}, input={inputData[0]:X16} {inputData[1]:X16} {inputData[2]:X16}");
                             return hook.Original(self, eventType, eventParam, eventData, inputData);
@@ -90,7 +89,7 @@ namespace BossMod
                     if (!_rcvAgentHooks.ContainsKey(address))
                     {
                         Hook<AgentReceiveEventDelegate> hook = null!;
-                        _rcvAgentHooks[address] = hook = Service.Hook.HookFromAddress<AgentReceiveEventDelegate>(address, (self, eventData, values, valueCount, eventKind) =>
+                        _rcvAgentHooks[address] = hook = Hook<AgentReceiveEventDelegate>.FromAddress(address, (self, eventData, values, valueCount, eventKind) =>
                         {
                             Service.Log($"RCV: listener={agentId} {(nint)self:X}, kind={eventKind}, values={AtkValuesString(values, valueCount)}");
                             return hook.Original(self, eventData, values, valueCount, eventKind);

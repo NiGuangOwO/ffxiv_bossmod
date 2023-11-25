@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using Dalamud.Logging;
+using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -39,6 +40,8 @@ namespace BossMod
 
             foreach (var (t, n) in nodes)
             {
+                if (t.Name != "BossModuleConfig")
+                    continue;
                 var props = t.GetCustomAttribute<ConfigDisplayAttribute>();
                 n.Name = props?.Name ?? GenerateNodeName(t);
                 n.Order = props?.Order ?? 0;

@@ -74,14 +74,14 @@ namespace BossMod
                 {
                     var data = Service.DataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets.Action>()?.GetRow(hover.ActionID);
                     name = data?.Name;
-                    type = FFXIVClientStructs.FFXIV.Client.Game.ActionType.Action;
+                    type = FFXIVClientStructs.FFXIV.Client.Game.ActionType.Spell;
                     unlockLink = data?.UnlockLink ?? 0;
                 }
                 else if (hover.ActionKind == HoverActionKind.GeneralAction)
                 {
                     var data = Service.DataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets.GeneralAction>()?.GetRow(hover.ActionID);
                     name = data?.Name;
-                    type = FFXIVClientStructs.FFXIV.Client.Game.ActionType.GeneralAction;
+                    type = FFXIVClientStructs.FFXIV.Client.Game.ActionType.General;
                     unlockLink = data?.UnlockLink ?? 0;
                 }
                 else if (hover.ActionKind == HoverActionKind.Trait)

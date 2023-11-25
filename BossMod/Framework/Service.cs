@@ -1,5 +1,8 @@
 ﻿using Dalamud.Game;
+using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Keys;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.Gui;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin.Services;
@@ -15,15 +18,15 @@ namespace BossMod
         [PluginService] public static IClientState ClientState { get; private set; }
         [PluginService] public static IObjectTable ObjectTable { get; private set; }
         [PluginService] public static IPartyList PartyList { get; private set; }
-        [PluginService] public static IChatGui ChatGui { get; private set; }
+        [PluginService] public static ChatGui ChatGui { get; private set; }
         [PluginService] public static IGameGui GameGui { get; private set; }
-        [PluginService] public static IGameInteropProvider Hook { get; private set; }
+        //[PluginService] public static GameInteropProvider Hook { get; private set; }
         [PluginService] public static ISigScanner SigScanner { get; private set; }
         [PluginService] public static IJobGauges JobGauges { get; private set; }
-        [PluginService] public static IKeyState KeyState { get; private set; }
-        [PluginService] public static ICondition Condition { get; private set; }
+        [PluginService] public static KeyState KeyState { get; private set; }
+        [PluginService] public static Condition Condition { get; private set; }
         [PluginService] public static ITargetManager TargetManager { get; private set; }
-        [PluginService] public static IFramework Framework { get; private set; }
+        [PluginService] public static Framework Framework { get; private set; }
 #pragma warning restore CS8618
 
         public static Action<string>? LogHandler = null;

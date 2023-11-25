@@ -12,7 +12,7 @@ namespace UIDev
     {
         private SimpleImGuiScene _scene;
         private List<Type> _testTypes;
-        private ReplayManager _replayManager = new(".");
+        //private ReplayManager _replayManager = new(".");
         private string _configPath;
 
         // don't allow closing window by esc while there are any config modifications
@@ -35,7 +35,7 @@ namespace UIDev
 
         protected override void Dispose(bool disposing)
         {
-            _replayManager.Dispose();
+            //_replayManager.Dispose();
         }
 
         public override void OnClose()
@@ -60,8 +60,8 @@ namespace UIDev
             }
 
             ImGui.Separator();
-            _replayManager.Update();
-            _replayManager.Draw();
+            //_replayManager.Update();
+            //_replayManager.Draw();
             ImGui.Separator();
 
             //if (ImGui.Button("Open ACT log..."))

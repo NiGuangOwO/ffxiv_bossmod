@@ -1,41 +1,15 @@
-﻿using Dalamud.Common;
+﻿using Dalamud;
+using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Command;
-using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using ImGuiNET;
 using System;
 using System.Reflection;
 
 namespace BossMod
 {
-    class RepoMigrateWindow : Window
-    {
-        public static string OldURL = "https://raw.githubusercontent.com/awgil/ffxiv_plugin_distribution/master/pluginmaster.json";
-        public static string NewURL = "https://puni.sh/api/repository/veyn";
-
-        public RepoMigrateWindow() : base("Warning! Plugin home repository was changed")
-        {
-            IsOpen = true;
-        }
-
-        public override void Draw()
-        {
-            ImGui.TextUnformatted("The home repository of Boss Mod (vbm) plugin was recently changed.");
-            ImGui.TextUnformatted("Please update your dalamud settings to point to the new repository:");
-            if (ImGui.Button("Click here to copy new url into clipboard"))
-                ImGui.SetClipboardText(NewURL);
-            ImGui.TextUnformatted("1. Go to repo settings (esc -> dalamud settings -> experimental).");
-            ImGui.TextUnformatted($"2. Replace '{OldURL}' with '{NewURL}' (use button above and just ctrl-V -> enter).");
-            ImGui.TextUnformatted("3. Press save-and-close button.");
-            ImGui.TextUnformatted("4. Go to dalamud plugins (esc -> dalamud plugins -> installed plugins).");
-            ImGui.TextUnformatted("5. Uninstall and reinstall this plugin (you might need to restart the game before dalamud allows you to reinstall).");
-            ImGui.TextUnformatted("Don't worry, you won't lose any settings. Sorry for bother and enjoy the plugin!");
-        }
-    }
-
     public sealed class Plugin : IDalamudPlugin
     {
         public string Name => "Boss Mod";
@@ -52,10 +26,10 @@ namespace BossMod
 
         // windows
         private BossModuleMainWindow _wndBossmod;
-        private BossModulePlanWindow _wndBossmodPlan;
-        private BossModuleHintsWindow _wndBossmodHints;
-        private ReplayManagementWindow _wndReplay;
-        private MainDebugWindow _wndDebug;
+        //private BossModulePlanWindow _wndBossmodPlan;
+        //private BossModuleHintsWindow _wndBossmodHints;
+        //private ReplayManagementWindow _wndReplay;
+        //private MainDebugWindow _wndDebug;
 
         private bool isDev = false;
         private bool warning = false;
@@ -80,8 +54,7 @@ namespace BossMod
             Service.LuminaGameData = Service.DataManager.GameData;
             Service.WindowSystem = new("vbm");
             //Service.Device = pluginInterface.UiBuilder.Device;
-            Service.Condition.ConditionChange += OnConditionChanged;
-            MultiboxUnlock.Exec();
+            //MultiboxUnlock.Exec();
             Network.IDScramble.Initialize();
             Camera.Instance = new();
 
@@ -92,19 +65,8 @@ namespace BossMod
             //ActionManagerEx.Instance = new(); // needs config
 
             _commandManager = commandManager;
-            if (dalamud.SourceRepository == RepoMigrateWindow.OldURL)
-            {
-                var migrateWindow = new RepoMigrateWindow();
-                migrateWindow.IsOpen = true;
-                _commandManager.AddHandler("/vbm", new((_, _) => migrateWindow.IsOpen = true));
-                Service.WindowSystem.AddWindow(migrateWindow);
-                Service.Config.Get<BossModuleConfig>().Enable = false;
-                Service.Config.Get<AutorotationConfig>().Enabled = false;
-            }
-            else
-            {
-                _commandManager.AddHandler("/vbm", new CommandInfo(OnCommand) { HelpMessage = "Show boss mod config UI" });
-            }
+            _commandManager.AddHandler("/vbm", new CommandInfo(OnCommand) { HelpMessage = "Show boss mod config UI" });
+
 
             _network = new(dalamud.ConfigDirectory);
             _ws = new(dalamudStartInfo?.GameVersion?.ToString() ?? "unknown");
@@ -114,10 +76,10 @@ namespace BossMod
             // _broadcast = new();
 
             _wndBossmod = new(_bossmod);
-            _wndBossmodPlan = new(_bossmod);
-            _wndBossmodHints = new(_bossmod);
-            _wndReplay = new(_ws, dalamud.ConfigDirectory);
-            _wndDebug = new(_ws, _autorotation);
+            //_wndBossmodPlan = new(_bossmod);
+            //_wndBossmodHints = new(_bossmod);
+            //_wndReplay = new(_ws, dalamud.ConfigDirectory);
+            //_wndDebug = new(_ws, null);
 
             dalamud.UiBuilder.DisableAutomaticUiHide = true;
             dalamud.UiBuilder.Draw += DrawUI;
@@ -140,18 +102,17 @@ namespace BossMod
                 Service.Framework.Update -= OnUpdate;
                 return;
             }
-            Service.Condition.ConditionChange -= OnConditionChanged;
-            _wndDebug.Dispose();
-            _wndReplay.Dispose();
-            _wndBossmodHints.Dispose();
-            _wndBossmodPlan.Dispose();
+            //_wndDebug.Dispose();
+            //_wndReplay.Dispose();
+            //_wndBossmodHints.Dispose();
+            //_wndBossmodPlan.Dispose();
             _wndBossmod.Dispose();
             _bossmod.Dispose();
             _network.Dispose();
-            _ai.Dispose();
-            _autorotation.Dispose();
+            //_ai.Dispose();
+            //_autorotation.Dispose();
             _ws.Dispose();
-            ActionManagerEx.Instance?.Dispose();
+            //ActionManagerEx.Instance?.Dispose();
             _commandManager.RemoveHandler("/vbm");
         }
 
@@ -181,9 +142,9 @@ namespace BossMod
                     GC.WaitForPendingFinalizers();
                     GC.Collect();
                     break;
-                case "r":
-                    _wndReplay.SetVisible(!_wndReplay.IsOpen);
-                    break;
+                    //case "r":
+                    //    _wndReplay.SetVisible(!_wndReplay.IsOpen);
+                    //    break;
             }
         }
 
@@ -211,11 +172,6 @@ namespace BossMod
 
             Camera.Instance?.DrawWorldPrimitives();
             _prevUpdateTime = DateTime.Now - tsStart;
-        }
-
-        private void OnConditionChanged(ConditionFlag flag, bool value)
-        {
-            Service.Log($"Condition chage: {flag}={value}");
         }
     }
 }
